@@ -47,9 +47,8 @@ namespace AutocadToolsPlugin
                     acTrans.Commit();
                 }
             }
-            
         }
-        
+
         public static void CreateAcText(string fix, int number, Point3d pos, Transaction acTrans)
         {
             var acDoc = Application.DocumentManager.MdiActiveDocument;
@@ -76,13 +75,13 @@ namespace AutocadToolsPlugin
             var doc = Application.DocumentManager.MdiActiveDocument;
             var db = doc.Database;
             var editor = Application.DocumentManager.MdiActiveDocument.Editor;
-            var result = "";
+            var result = " ";
             using (var transaction = db.TransactionManager.StartTransaction())
             {
                 var selecttionPrompt = editor.GetSelection();
 
                 if (selecttionPrompt.Status != PromptStatus.OK) return result;
-                
+
                 foreach (SelectedObject selectedObject in selecttionPrompt.Value)
                 {
                     if (selectedObject == null) continue;
@@ -90,19 +89,19 @@ namespace AutocadToolsPlugin
 
                     if (dbText != null)
                     {
-                        result += dbText.TextString;
+                        result = result + " " + dbText.TextString;
                     }
                     else
                     {
                         var mText = transaction.GetObject(selectedObject.ObjectId, OpenMode.ForRead) as MText;
                         if (mText == null) continue;
-                        result += mText.Contents;
+                        result = result + " " + mText.Text;
                     }
                 }
             }
             return result;
         }
-        
+
         /// <summary>
         /// Gets all digits(i.e 123 0.123 0,123 .123 ) from txt
         /// </summary>
@@ -112,7 +111,7 @@ namespace AutocadToolsPlugin
         {
             txt = Regex.Replace(txt, @",", ".");
             return (from Match match in Regex.Matches(txt, @"(\d+[\.]\d+)|([\.]\d+)|\d+")
-                select Convert.ToSingle(match.Value, new CultureInfo("en-US"))).ToList();
+                select Convert.ToSingle(match.Value, CultureInfo.InvariantCulture)).ToList();
         }
     }
 }
