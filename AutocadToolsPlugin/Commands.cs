@@ -11,14 +11,13 @@ namespace AutocadToolsPlugin
         public void Initialize()
         {
             var ed = Application.DocumentManager.MdiActiveDocument.Editor;
-            ed.WriteMessage(Tools.GetText());
-            ed.WriteMessage("another text yet");
+            ed.WriteMessage("Start AutocadToolsPlugin");
         }
 
         public void Terminate()
         {
             var ed = Application.DocumentManager.MdiActiveDocument.Editor;
-            ed.WriteMessage("Terminate AutoNumerate plugin");
+            ed.WriteMessage("Terminate AutocadToolsPlugin");
         }
 
         [CommandMethod("NUMERABLETEXT")]

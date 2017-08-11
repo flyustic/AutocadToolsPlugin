@@ -13,11 +13,6 @@ namespace AutocadToolsPlugin
 {
     public class Tools
     {
-        public static string GetText()
-        {
-            return "initialize!!!!!!\n";
-        }
-        
         public static void CreateAutoNumerateText()
         {
             var acDoc = Application.DocumentManager.MdiActiveDocument;
