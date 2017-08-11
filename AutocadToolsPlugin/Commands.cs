@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using System.Globalization;
 using Autodesk.AutoCAD.ApplicationServices;
 using Autodesk.AutoCAD.Runtime;
