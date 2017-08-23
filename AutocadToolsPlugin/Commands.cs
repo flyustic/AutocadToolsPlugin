@@ -115,7 +115,8 @@ namespace AutocadToolsPlugin
             var text = "";
             const string separator = ";";
             const string template = "%<\\AcObjProp Object(%<\\_ObjId {0}>%).TextString>%";
-            
+            const string templateForLen = "%<\\AcObjProp.16.2 Object(%<\\_ObjId {0} >%).Length \\f \"%lu2%pr1%ds44%ct8[0.001]\" >%";
+
             var selecttionPrompt = editor.GetSelection();
             if (selecttionPrompt.Status != PromptStatus.OK) return;
             
@@ -146,6 +147,41 @@ namespace AutocadToolsPlugin
         public void GetFormatForManyFieldsAlias()
         {
             GetFormatForManyFields();
+        }
+
+        [CommandMethod("FIELDSBYTEXTSLEN", CommandFlags.UsePickSet)]
+        public void GetFormatForManyFieldsLen()
+        {
+            var doc = Application.DocumentManager.MdiActiveDocument;
+            var db = doc.Database;
+            var editor = Application.DocumentManager.MdiActiveDocument.Editor;
+            var text = "";
+            const string separator = ";";
+            const string template = "%<\\AcObjProp.16.2 Object(%<\\_ObjId {0} >%).Length \\f \"%lu2%pr1%ds44%ct8[0.001]\" >%";
+
+            var selecttionPrompt = editor.GetSelection();
+            if (selecttionPrompt.Status != PromptStatus.OK) return;
+
+            using (var transaction = db.TransactionManager.StartTransaction())
+            {
+
+                foreach (SelectedObject selectedObject in selecttionPrompt.Value)
+                {
+                    if (selectedObject == null) continue;
+                    var ent = transaction.GetObject(selectedObject.ObjectId, OpenMode.ForRead) as Entity;
+                    if (ent as Line != null || ent as Polyline != null)
+                    {
+                        text += string.Format(template, ent.ObjectId.OldIdPtr) + separator;
+                    }
+                }
+            }
+            editor.WriteMessage(string.Format("============================\n{0}\n============================", text));
+        }
+
+        [CommandMethod("ФИЛДЫЛЕН", CommandFlags.UsePickSet)]
+        public void GetFormatForManyFieldsLenAlias()
+        {
+            GetFormatForManyFieldsLen();
         }
     }
 }
